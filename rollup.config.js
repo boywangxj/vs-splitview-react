@@ -8,7 +8,7 @@ const eslint = require('rollup-plugin-eslint').eslint;
 const babel = require('rollup-plugin-babel');
 import pkg from './package.json';
 import copy from 'rollup-plugin-copy';
-
+import dts from 'rollup-plugin-dts';
 export default {
   input: 'lib/index.ts',
   output: [
@@ -55,7 +55,7 @@ export default {
       },
     }),
 
-    // dts(),
+    dts(),
   ],
   watch: {
     include: 'lib/**',
