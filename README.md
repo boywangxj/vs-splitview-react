@@ -1,4 +1,4 @@
-[English](./README-en.md) | 简体中文
+[English](./README.en-US.md) | 简体中文
 # VS-SPLITVIEW-REACT
 仿VS Code SplitView 的React组件。我的认知范围内SplitView功能都有，如果没有请提交Issue。
 ## [演示](https://boywangxj.github.io/vs-splitview-react)  
