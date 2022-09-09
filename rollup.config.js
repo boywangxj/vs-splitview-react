@@ -54,8 +54,7 @@ export default {
         'node_modules/react-is/index.js': ['isFragment', 'isMemo'],
       },
     }),
-
-    dts(),
+    // dts(),
   ],
   watch: {
     include: 'lib/**',
