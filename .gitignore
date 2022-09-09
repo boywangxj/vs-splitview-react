@@ -1,0 +1,20 @@
+.vscode/
+node_modules/
+dist/
+coverage/
+/npm-debug.log*
+/yarn-error.log
+/yarn.lock
+/package-lock.json
+
+# misc
+.DS_Store
+
+# umi
+.umi
+.umi-production
+.env.local
+
+# ide
+/.vscode
+/.idea

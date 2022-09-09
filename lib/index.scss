@@ -1,0 +1,86 @@
+.split-view {
+  display: block;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+
+  .split-view-pane-contaienr {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+
+    .split-view-pane {
+      position: absolute;
+      display: block;
+      // border: 1px solid red;
+      box-sizing: border-box;
+      overflow: auto;
+    }
+  }
+
+  .split-view-sash-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .split-view-sash {
+      position: absolute;
+      background-color: transparent;
+      z-index: 35;
+
+      &.hover {
+        background-color: rgb(0, 122, 204);
+      }
+
+      &.horizontal {
+        height: 100%;
+
+        &.minimum {
+          cursor: e-resize;
+        }
+
+        &.maximum {
+          cursor: w-resize;
+        }
+
+        &.enabled {
+          cursor: ew-resize;
+        }
+
+        &.disabled {
+          cursor: inherit;
+        }
+      }
+
+
+      &.vertical {
+        width: 100%;
+
+        &.minimum {
+          cursor: s-resize;
+        }
+
+        &.maximum {
+          cursor: n-resize;
+        }
+
+        &.enabled {
+          cursor: ns-resize;
+        }
+
+        &.disabled {
+          cursor: inherit;
+        }
+      }
+    }
+  }
+}
+
+.t {
+  width: 100%;
+}

@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "dumi-app",
+  "scripts": {
+    "start": "dumi dev",
+    "build": "dumi build",
+    "prettier": "prettier --write \"**/*.{js,jsx,tsx,ts,less,md,json}\""
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,less,md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "prettier --parser=typescript --write"
+    ]
+  },
+  "dependencies": {
+    "react": "link:../node_modules/react",
+    "vs-splitview-react": "link:.."
+  },
+  "devDependencies": {
+    "@umijs/plugin-sass": "^1.1.1",
+    "dumi": "^1.0.13",
+    "lint-staged": "^10.0.7",
+    "prettier": "^2.2.1",
+    "typescript": "^4.8.2",
+    "yorkie": "^2.0.0"
+  }
+}
