@@ -1,6 +1,6 @@
 {
   "name": "vs-splitview-react",
-  "version": "1.0.0",
+  "version": "v1.0.0",
   "description": "VS Code style Split view.",
   "license": "MIT",
   "keywords": [
@@ -141,16 +141,18 @@
     "typescript": "^4.1.2"
   },
   "prettier": {
-    "overrides": [{
-      "files": [
-        ".prettierrc",
-        ".babelrc",
-        ".eslintrc"
-      ],
-      "options": {
-        "parser": "json"
+    "overrides": [
+      {
+        "files": [
+          ".prettierrc",
+          ".babelrc",
+          ".eslintrc"
+        ],
+        "options": {
+          "parser": "json"
+        }
       }
-    }],
+    ],
     "singleQuote": true
   },
   "lint-staged": {
