@@ -34,7 +34,7 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
     (t) => t.maxSize && t.maxSize > 0 && t.maxSize !== Number.POSITIVE_INFINITY
   ).length;
   paneData.forEach((pane, index) => {
-    let size = pane.size;
+    let size = pane.size || 0;
     const minSize = pane.minSize || 0;
     let maxSize: number = pane.maxSize || Number.POSITIVE_INFINITY;
     let collapsable = pane.snapable || false; // 默认不可折叠
@@ -50,18 +50,21 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
         maxSize = Number.POSITIVE_INFINITY;
       }
     }
-    if (size === undefined) {
-      size = minSize;
-    }
+    // if (size === undefined) {
+    //   size = 0;
+    // }
     if (pane.snapable) {
       pane.snappedSize = pane.snappedSize || 0; // 默认0
+      // if (size > pane.snappedSize) {
+      //   pane.snapped = false;
+      // }
     }
     if (collapsable && pane.snapped === true) {
       size = pane.snappedSize!;
+    } else {
+      size = pane.minSize;
     }
-    if (size > 0) {
-      pane.snapped = false;
-    }
+
     pane.snapable = collapsable;
     pane.minSize = minSize;
     pane.maxSize = maxSize;
