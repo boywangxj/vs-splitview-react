@@ -23,7 +23,8 @@ const isPaneEquals = (pane1: SplitViewPaneInfo, pane2: SplitViewPaneInfo) => {
     pane1.priority === pane2.priority &&
     pane1.size === pane2.size &&
     pane1.snapable === pane2.snapable &&
-    pane1.snapped === pane2.snapped
+    pane1.snapped === pane2.snapped &&
+    pane1.snappedSize === pane2.snappedSize
   );
 };
 
@@ -52,9 +53,11 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
     if (size === undefined) {
       size = minSize;
     }
-
+    if (pane.snapable) {
+      pane.snappedSize = pane.snappedSize || 0; // 默认0
+    }
     if (collapsable && pane.snapped === true) {
-      size = 0;
+      size = pane.snappedSize!;
     }
     if (size > 0) {
       pane.snapped = false;
@@ -153,7 +156,7 @@ const resize = (
 ) => {
   let adjustSizeTotal = adjustSize;
   let adjustableSize = 0;
-  if (panes[0].snapped && panes[0].size === 0) {
+  if (panes[0].snapped && panes[0].size === panes[0].snappedSize) {
     return 0;
   }
   for (let i = 0; i < panes.length && adjustSizeTotal > 0; i++) {
@@ -177,7 +180,7 @@ const resize = (
       }
       adjustableSize += paneAdjustableSize;
     }
-    if (commiting && pane.snapped && pane.size! != 0) {
+    if (commiting && pane.snapped && pane.size! != pane.snappedSize) {
       pane.snapped = false;
     }
   }
@@ -192,6 +195,7 @@ const SplitView: React.FC<SplitViewProps> = ({
   hoverDelay = DEFAULT_HOVER_DELAY,
   sashSize = DEFAULT_SASH_SIZE,
 }) => {
+  // console.log('paneData is2222 ', paneData);
   const [paneDataState, setPaneDataState] = useState(
     paneData.map((t) => ({ ...t }))
   );
@@ -250,12 +254,19 @@ const SplitView: React.FC<SplitViewProps> = ({
         let increasableSize = resize(increasingPanes, adjustSize, 1, false);
         let decreasableSize = resize(decreasingPanes, adjustSize, -1, false);
 
+        console.log(
+          'snapped0000',
+          increasableSize,
+          decreasableSize,
+          sumRef.current
+        );
         if (
           increasableSize == 0 &&
           increasingPanes[0].snapable &&
           increasingPanes[0].snapped &&
           increasingPanes[0].minSize != increasingPanes[0].maxSize
         ) {
+          console.log('snapped0', sumRef.current);
           const fixedPaneCount = increasingPanes.reduce((total, pane) => {
             if (pane.minSize === pane.maxSize) {
               return total + 1;
@@ -263,18 +274,24 @@ const SplitView: React.FC<SplitViewProps> = ({
             return total;
           }, 0);
           if (fixedPaneCount === increasingPanes.length - 1) {
-            const decreasableSize1 = resize(
-              decreasingPanes,
-              increasingPanes[0].minSize,
-              -1,
-              false
+            const a =
+              increasingPanes[0].minSize - increasingPanes[0].snappedSize!;
+
+            const decreasableSize1 = resize(decreasingPanes, a, -1, false);
+            console.log(
+              'snapped11111',
+              sumRef.current,
+              decreasableSize1,
+              increasingPanes[0].minSize
             );
-            if (decreasableSize1 >= increasingPanes[0].minSize) {
+            if (decreasableSize1 >= a) {
               sumRef.current += Math.abs(delta);
             }
+            console.log('snapped1', sumRef.current);
             if (sumRef.current > DEFAULT_SNAP_THRESHOLD_SIZE) {
+              console.log('snapped2');
               sumRef.current = 0;
-              increasableSize = decreasableSize = increasingPanes[0].minSize;
+              increasableSize = decreasableSize = a;
               increasingPanes[0].snapped = false;
             }
           }
@@ -296,19 +313,21 @@ const SplitView: React.FC<SplitViewProps> = ({
           if (fixedPaneCount === decreasingPanes.length - 1) {
             const collapsingPane = decreasingPanes[0];
             if (collapsingPane.snapable) {
+              const as = collapsingPane.minSize - collapsingPane.snappedSize!;
               const increasableSize1 = resize(
                 increasingPanes,
-                collapsingPane.minSize,
+                collapsingPane.minSize - collapsingPane.snappedSize!,
                 1,
                 false
               );
 
-              if (increasableSize1 >= collapsingPane.minSize) {
+              if (increasableSize1 >= as) {
                 // 停靠
                 sumRef.current += Math.abs(delta);
                 if (sumRef.current > DEFAULT_SNAP_THRESHOLD_SIZE) {
                   sumRef.current = 0;
-                  increasableSize = decreasableSize = collapsingPane.minSize;
+                  increasableSize = decreasableSize =
+                    collapsingPane.minSize - collapsingPane.snappedSize!;
                   collapsingPane.snapped = true;
                 }
               }

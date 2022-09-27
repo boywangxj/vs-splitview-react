@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 
 import {
@@ -9,7 +9,7 @@ import {
 } from 'vs-splitview-react';
 
 const Advance = () => {
-  const [paneData1, setPaneData1] = useState<SplitViewPaneInfo[]>([
+  const [paneData1] = useState<SplitViewPaneInfo[]>([
     {
       paneKey: 'menu',
       minSize: 30,

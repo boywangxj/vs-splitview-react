@@ -1,24 +1,24 @@
 ---
 nav:
-  title: Guides
+  title: 指南
   order: 1
 order: 1
-title: Getting Started
+title: 快速开始
 ---
 # SplitView of React
-A VSCode style SplitView component for React.It have all the SplitView features within my cognitive range, if there are no features you need please submit an issue.
-## [Live Demo](http://#)  
-## ✨ Features
-- 🌈 VSCode Style SplitView;
-- 📦 Support priority. When the parent container changes size or drag sash, the one with high priority will be resized first;
-- 🛡 Supports minimum and maximum size constraints;
-- ⚙️ Supports snapping;
-- 🌍 Supports fixed pane;
-- 🎨 Supports chain effect;
-- ⛪ Supports hover delay;
-- 🎷 Supports persistance;
-- 📚 Supports nested layout；
-## 🖥 Environment Support
+仿VS Code SplitView 的React组件。我的认知范围内SplitView功能都有，如果没有请提交Issue。
+## [演示](http://#)  
+## ✨ 特性
+- 🌈 VSCode 类似的SplitView功能；
+- 📦 支持优先级，在父容器改变大小或拖动Sash时，优先级高的先调整大小；
+- 🛡 支持最小尺寸和最大尺寸约束;
+- ⚙️ 支持停靠;
+- 🌍 支持固定Pane;
+- 🎨 支持连锁反应;
+- ⛪ 支持Hover Delay;
+- 🎷 支持布局存储;
+- 📚 支持嵌套布局。
+## 🖥 环境
 
 - Modern browsers and Internet Explorer 11 (with [polyfills](https://stackoverflow.com/questions/57020976/polyfills-in-2019-for-ie11))
 - Server-side Rendering
@@ -28,7 +28,7 @@ A VSCode style SplitView component for React.It have all the SplitView features 
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | IE11, Edge                                                                                                                                                                                                     | last 2 versions                                                                                                                                                                                                  | last 2 versions                                                                                                                                                                                              | last 2 versions                                                                                                                                                                                              | last 2 versions                                                                                                                                                                                                      |
 
-## 📦 Install
+## 📦 安装
 
 ```bash
 npm install vs-splitview-react
@@ -37,7 +37,7 @@ npm install vs-splitview-react
 ```bash
 yarn add vs-splitview-react
 ```
-## 🔨 Usage
+## 🔨 使用
 
 ```tsx | pure
 import { useState } from 'react';
@@ -88,10 +88,13 @@ const BasicUsage = () => {
 };
 
 export default BasicUsage;
+/**
+ * 由于SplitView的容器width和height指定的是100%，所以SplitView的父容器必须指定高度。
+ * */
 ```
-> Since the width and height of the splitview container are 100%, the parent container of the splitview must have a height (specify or inherit, etc.).
+> 由于SplitView的容器width和height指定的是100%，所以SplitView的父容器必须有高度（指定或继承等）。
 >
-And import style manually:
+手动添加样式:
 
 ```tsx | pure
 import 'vs-splitview-react/dist/index.css'; // or 'vs-splitview-react/dist/index.scss'

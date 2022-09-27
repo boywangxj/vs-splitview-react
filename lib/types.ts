@@ -27,7 +27,10 @@ export type SplitViewPaneInfo = {
    * 是否已经折叠
    */
   snapped?: boolean;
-
+  /**
+   * 折叠后的大小,默认0
+   */
+  snappedSize?: number;
   /**
    * 夫容器尺寸发生变化时调整Pane尺寸的优先级
    */
