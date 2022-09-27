@@ -111,15 +111,16 @@ import 'vs-splitview-react/dist/index.css'; // or 'vs-splitview-react/dist/index
 | paneKey  | Pane的唯一Key，与SplitViewPaneInfo中的paneKey对应。使用paneKey练习SplitViewPane组件于paneData的关系。 | `string` | -             |
 ### SplitViewPaneInfo
 
-| Property | Description                                                                                          | Type      | Default Value |
-| -------- | ---------------------------------------------------------------------------------------------------- | --------- | ------------- |
-| paneKey  | Pane的唯一Key，对应于SplitViewPane.paneKey。使用paneKey练习SplitViewPane组件于paneData的关系。       | `string`  | -             |
-| minSize  | 最小尺寸。                                                                                           | `number`  | -             |
-| size     | 当前尺寸。会根据容器大小、优先级等计算出实时尺寸。                                                   | `number`  | -             |
-| maxSize  | 最大尺寸。最大尺寸。如果SplitView.paneData中的所有maxSize都设置了值，那么最后一个Pane的maxSize无效。 | `number`  | -             |
-| snapable | 是否可以停靠。true时snaped属性才有效。                                                               | `boolean` | false         |
-| snapped  | 是否已经停靠。仅当snapable是true是有效。                                                             | `boolean` | -             |
-| priority | 优先级。数值越高的Pane优先调整大小。                                                                 | `number`  | 0             |
+| Property    | Description                                                                                          | Type      | Default Value |
+| ----------- | ---------------------------------------------------------------------------------------------------- | --------- | ------------- |
+| paneKey     | Pane的唯一Key，对应于SplitViewPane.paneKey。使用paneKey练习SplitViewPane组件于paneData的关系。       | `string`  | -             |
+| minSize     | 最小尺寸。                                                                                           | `number`  | -             |
+| size        | 当前尺寸。会根据容器大小、优先级等计算出实时尺寸。                                                   | `number`  | -             |
+| maxSize     | 最大尺寸。最大尺寸。如果SplitView.paneData中的所有maxSize都设置了值，那么最后一个Pane的maxSize无效。 | `number`  | -             |
+| snapable    | 是否可以停靠。true时snaped属性才有效。                                                               | `boolean` | false         |
+| snapped     | 是否已经停靠。仅当snapable是true是有效。                                                             | `boolean` | -             |
+| snappedSize | 停靠后的大小。                                                                                       | `boolean` | 0             |
+| priority    | 优先级。数值越高的Pane优先调整大小。                                                                 | `number`  | 0             |
 ### 全局方法
 用于支持处理Pane在同一个SplitView或不同SplitView之间移动。如果你需要实现Pane的移动拖放、布局配置等操作，这些方法可以帮到你。
 #### paneMoveTo
