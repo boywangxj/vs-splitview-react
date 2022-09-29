@@ -37,11 +37,11 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
     let size = pane.size;
     const minSize = pane.minSize || 0;
     let maxSize: number = pane.maxSize || Number.POSITIVE_INFINITY;
-    let collapsable = pane.snapable || false; // 默认不可折叠
+    pane.snapable = pane.snapable || false; // 默认不可折叠
 
     if (minSize === 0) {
       // 仅当minSize>0有效
-      collapsable = false;
+      pane.snapable = false;
     }
 
     if (index === paneData.length - 1) {
@@ -50,19 +50,15 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
         maxSize = Number.POSITIVE_INFINITY;
       }
     }
-    if (size === undefined) {
-      size = minSize;
-    }
     if (pane.snapable) {
       pane.snappedSize = pane.snappedSize || 0; // 默认0
     }
-    if (collapsable && pane.snapped === true) {
+    if (pane.snapable && pane.snapped === true) {
       size = pane.snappedSize!;
+    } else {
+      size = pane.minSize;
     }
-    if (size > 0) {
-      pane.snapped = false;
-    }
-    pane.snapable = collapsable;
+
     pane.minSize = minSize;
     pane.maxSize = maxSize;
     pane.priority = pane.priority || 0;
@@ -195,7 +191,6 @@ const SplitView: React.FC<SplitViewProps> = ({
   hoverDelay = DEFAULT_HOVER_DELAY,
   sashSize = DEFAULT_SASH_SIZE,
 }) => {
-  // console.log('paneData is2222 ', paneData);
   const [paneDataState, setPaneDataState] = useState(
     paneData.map((t) => ({ ...t }))
   );
@@ -253,20 +248,12 @@ const SplitView: React.FC<SplitViewProps> = ({
         // 仅计算尺寸
         let increasableSize = resize(increasingPanes, adjustSize, 1, false);
         let decreasableSize = resize(decreasingPanes, adjustSize, -1, false);
-
-        console.log(
-          'snapped0000',
-          increasableSize,
-          decreasableSize,
-          sumRef.current
-        );
         if (
           increasableSize == 0 &&
           increasingPanes[0].snapable &&
           increasingPanes[0].snapped &&
           increasingPanes[0].minSize != increasingPanes[0].maxSize
         ) {
-          console.log('snapped0', sumRef.current);
           const fixedPaneCount = increasingPanes.reduce((total, pane) => {
             if (pane.minSize === pane.maxSize) {
               return total + 1;
@@ -278,18 +265,11 @@ const SplitView: React.FC<SplitViewProps> = ({
               increasingPanes[0].minSize - increasingPanes[0].snappedSize!;
 
             const decreasableSize1 = resize(decreasingPanes, a, -1, false);
-            console.log(
-              'snapped11111',
-              sumRef.current,
-              decreasableSize1,
-              increasingPanes[0].minSize
-            );
+
             if (decreasableSize1 >= a) {
               sumRef.current += Math.abs(delta);
             }
-            console.log('snapped1', sumRef.current);
             if (sumRef.current > DEFAULT_SNAP_THRESHOLD_SIZE) {
-              console.log('snapped2');
               sumRef.current = 0;
               increasableSize = decreasableSize = a;
               increasingPanes[0].snapped = false;

@@ -1,7 +1,22 @@
-import { SplitView, SplitViewPane } from 'vs-splitview-react';
+import {
+  SplitView,
+  SplitViewPane,
+  SplitViewPaneInfo,
+} from 'vs-splitview-react';
 import React from 'react';
 import 'vs-splitview-react/dist/index.scss';
+import { useState } from 'react';
 const BasicUsage = () => {
+  const [paneData, setPaneData] = useState<SplitViewPaneInfo[]>([
+    {
+      paneKey: 'Pane1',
+      minSize: 180,
+      snapable: true,
+      snappedSize: 24,
+    },
+    { paneKey: 'Pane2', minSize: 180 },
+    { paneKey: 'Pane3', minSize: 400 },
+  ]);
   return (
     <div
       style={{ height: 300, minWidth: 600, overflow: 'auto' }}
@@ -9,16 +24,8 @@ const BasicUsage = () => {
     >
       <SplitView
         viewName="base.view1"
-        paneData={[
-          {
-            paneKey: 'Pane1',
-            minSize: 180,
-            snapable: true,
-            snappedSize: 24,
-          },
-          { paneKey: 'Pane2', minSize: 180 },
-          { paneKey: 'Pane3', minSize: 400 },
-        ]}
+        paneData={paneData}
+        onChange={(p) => setPaneData([...p])}
       >
         <SplitViewPane paneKey="Pane1">
           <div
@@ -41,7 +48,17 @@ const BasicUsage = () => {
               boxSizing: 'border-box',
             }}
           >
-            pane2
+            <button
+              onClick={() => {
+                setPaneData((pre) => {
+                  const p = pre[0];
+                  p.snapped = !p.snapped;
+                  return pre.map((t) => ({ ...t }));
+                });
+              }}
+            >
+              折叠
+            </button>
           </div>
         </SplitViewPane>
         <SplitViewPane paneKey="Pane3" className="content-pane">
