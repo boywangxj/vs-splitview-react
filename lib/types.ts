@@ -48,7 +48,7 @@ export type SplitViewProps = PropsWithChildren<{
   hoverDelay?: number;
   sashSize?: number;
   viewName?: string;
-  actionRef?: MutableRefObject<() => void>;
+  actionRef?: MutableRefObject<{ updatePaneData?: () => void }>;
 }>;
 
 export type SplitViewPaneProps = PropsWithChildren<{

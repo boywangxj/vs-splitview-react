@@ -243,7 +243,7 @@ const SplitView: React.FC<SplitViewProps> = ({
 
   useEffect(() => {
     if (actionRef) {
-      actionRef.current = updatePaneData;
+      actionRef.current = { updatePaneData };
     }
   }, [actionRef, updatePaneData]);
   // useEffect(() => {}, [paneData]);

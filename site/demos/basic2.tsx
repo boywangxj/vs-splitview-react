@@ -18,7 +18,7 @@ const BasicUsage = () => {
     { paneKey: 'Pane2', minSize: 180 },
     { paneKey: 'Pane3', minSize: 400 },
   ]);
-  const actionRef = useRef<() => void>();
+  const actionRef = useRef<{ updatePaneData?: () => void }>({});
   return (
     <div
       style={{ height: 300, minWidth: 600, overflow: 'auto' }}
@@ -58,7 +58,7 @@ const BasicUsage = () => {
                   p.snapped = !p.snapped;
                   return pre.map((t) => ({ ...t }));
                 });
-                actionRef?.current?.();
+                actionRef?.current?.updatePaneData?.();
               }}
             >
               折叠
