@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import 'vs-splitview-react/dist/index.scss';
 import { useState } from 'react';
+import { useRef } from 'react';
 const BasicUsage = () => {
   const [paneData, setPaneData] = useState<SplitViewPaneInfo[]>([
     {
@@ -17,6 +18,7 @@ const BasicUsage = () => {
     { paneKey: 'Pane2', minSize: 180 },
     { paneKey: 'Pane3', minSize: 400 },
   ]);
+  const actionRef = useRef<() => void>();
   return (
     <div
       style={{ height: 300, minWidth: 600, overflow: 'auto' }}
@@ -26,6 +28,7 @@ const BasicUsage = () => {
         viewName="base.view1"
         paneData={paneData}
         onChange={(p) => setPaneData([...p])}
+        actionRef={actionRef}
       >
         <SplitViewPane paneKey="Pane1">
           <div
@@ -55,6 +58,7 @@ const BasicUsage = () => {
                   p.snapped = !p.snapped;
                   return pre.map((t) => ({ ...t }));
                 });
+                actionRef?.current?.();
               }}
             >
               折叠

@@ -21,7 +21,7 @@ const isPaneEquals = (pane1: SplitViewPaneInfo, pane2: SplitViewPaneInfo) => {
     pane1.minSize === pane2.minSize &&
     pane1.paneKey === pane2.paneKey &&
     pane1.priority === pane2.priority &&
-    pane1.size === pane2.size &&
+    // pane1.size === pane2.size &&
     pane1.snapable === pane2.snapable &&
     pane1.snapped === pane2.snapped &&
     pane1.snappedSize === pane2.snappedSize
@@ -190,6 +190,7 @@ const SplitView: React.FC<SplitViewProps> = ({
   children,
   hoverDelay = DEFAULT_HOVER_DELAY,
   sashSize = DEFAULT_SASH_SIZE,
+  actionRef,
 }) => {
   const [paneDataState, setPaneDataState] = useState(
     paneData.map((t) => ({ ...t }))
@@ -197,32 +198,34 @@ const SplitView: React.FC<SplitViewProps> = ({
   const [containerSize, setContainerSize] = useState(0);
   const containerSizeRef = useRef(0);
   const initedRef = useRef(false);
+  const updatedRef = useRef(false);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   containerSizeRef.current = containerSize;
+  console.log('containerSize', containerSize);
   useEffect(() => {
-    if (containerSize > 0) {
+    if (!initedRef.current) {
       initedRef.current = true;
       setPaneDataState((prevPaneData) => {
         relayout(containerSize, prevPaneData);
-        return [...prevPaneData];
+        return prevPaneData.map((t) => ({ ...t }));
       });
     }
   }, [containerSize]);
-
-  useEffect(() => {
+  const updatePaneData = useCallback(() => {
     // 仅当paneInfo属性变化时
     setPaneDataState((prevPaneData) => {
+      console.log('ooo0000o2342342342', containerSizeRef.current);
       if (
-        containerSizeRef.current > 0 &&
-        (prevPaneData.length != paneData.length ||
-          paneData.some((pane1, index) => {
-            const pane2 = prevPaneData[index];
-            return (
-              pane1 !== pane2 || (pane2 && pane1 && !isPaneEquals(pane1, pane2))
-            );
-          }))
+        containerSizeRef.current > 0
+        //  &&
+        // (prevPaneData.length != paneData.length ||
+        //   paneData.some((pane1, index) => {
+        //     const pane2 = prevPaneData[index];
+        //     return pane2 && pane1 && !isPaneEquals(pane1, pane2);
+        //   }))
       ) {
+        console.log('ooo0000o');
         const paneDataCloned = paneData.map((t) => ({ ...t }));
         relayout(containerSizeRef.current, paneDataCloned);
         return [...paneDataCloned];
@@ -230,6 +233,20 @@ const SplitView: React.FC<SplitViewProps> = ({
       return prevPaneData;
     });
   }, [paneData]);
+  useEffect(() => {
+    if (!updatedRef.current && containerSize > 0) {
+      console.log('updated');
+      updatedRef.current = true;
+      updatePaneData();
+    }
+  }, [updatePaneData, containerSize]);
+
+  useEffect(() => {
+    if (actionRef) {
+      actionRef.current = updatePaneData;
+    }
+  }, [actionRef, updatePaneData]);
+  // useEffect(() => {}, [paneData]);
 
   const sumRef = useRef(0);
   const onSashDragStopedCallback = useCallback(() => {
@@ -395,8 +412,17 @@ const SplitView: React.FC<SplitViewProps> = ({
   }, [children]);
 
   useEffect(() => {
-    onChangeRef.current?.(paneDataState);
-  }, [paneDataState]);
+    if (
+      paneDataState.length != paneData.length ||
+      paneData.some((pane1, index) => {
+        const pane2 = paneDataState[index];
+        return pane2 && pane1 && !isPaneEquals(pane1, pane2);
+      })
+    ) {
+      console.log('o');
+      onChangeRef.current?.(paneDataState);
+    }
+  }, [paneDataState, paneData]);
 
   // 测试需要
   const testId =

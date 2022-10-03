@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { MutableRefObject, PropsWithChildren } from 'react';
 
 export type Layout = 'horizontal' | 'vertical';
 
@@ -48,6 +48,7 @@ export type SplitViewProps = PropsWithChildren<{
   hoverDelay?: number;
   sashSize?: number;
   viewName?: string;
+  actionRef?: MutableRefObject<() => void>;
 }>;
 
 export type SplitViewPaneProps = PropsWithChildren<{
