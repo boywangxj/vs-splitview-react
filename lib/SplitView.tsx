@@ -204,14 +204,18 @@ const SplitView: React.FC<SplitViewProps> = ({
   containerSizeRef.current = containerSize;
   console.log('containerSize', containerSize);
   useEffect(() => {
-    if (!initedRef.current) {
+    if (containerSize > 0) {
       initedRef.current = true;
+      console.log('ppppp', containerSize);
       setPaneDataState((prevPaneData) => {
-        relayout(containerSize, prevPaneData);
-        return prevPaneData.map((t) => ({ ...t }));
+        const data = prevPaneData.map((t) => ({ ...t }));
+        relayout(containerSize, data);
+        console.log('sosososo', data);
+        return data;
       });
     }
   }, [containerSize]);
+
   const updatePaneData = useCallback(() => {
     // 仅当paneInfo属性变化时
     setPaneDataState((prevPaneData) => {
@@ -233,6 +237,7 @@ const SplitView: React.FC<SplitViewProps> = ({
       return prevPaneData;
     });
   }, [paneData]);
+
   useEffect(() => {
     if (!updatedRef.current && containerSize > 0) {
       console.log('updated');
@@ -432,6 +437,7 @@ const SplitView: React.FC<SplitViewProps> = ({
   const sashContainerTestId = testId ? `${testId}_sash_container` : undefined;
   const paneContainerTestId = testId ? `${testId}_pane_container` : undefined;
 
+  console.log('render', paneAndSash);
   return (
     <Context.Provider value={{ layout, paneMap: paneAndSash.paneMap, testId }}>
       <ResizeObserver
