@@ -61,7 +61,7 @@ const SplitViewSash: React.FC<SplitViewSashProps> = ({
   const style: React.CSSProperties = {};
   const classNames: string[] = ['split-view-sash'];
   const center = position - size / 2;
-  if (layout == 'horizontal') {
+  if (layout === 'horizontal') {
     style.width = size;
     style.left = `${center}px`;
     classNames.push('horizontal');
@@ -69,7 +69,7 @@ const SplitViewSash: React.FC<SplitViewSashProps> = ({
       classNames.push('minimum');
     } else if (sashState === SplitViewSashState.Maximum) {
       classNames.push('maximum');
-    } else if (sashState == SplitViewSashState.Enabled) {
+    } else if (sashState === SplitViewSashState.Enabled) {
       classNames.push('enabled');
     }
   } else {
@@ -80,7 +80,7 @@ const SplitViewSash: React.FC<SplitViewSashProps> = ({
       classNames.push('minimum');
     } else if (sashState === SplitViewSashState.Maximum) {
       classNames.push('maximum');
-    } else if (sashState == SplitViewSashState.Enabled) {
+    } else if (sashState === SplitViewSashState.Enabled) {
       classNames.push('enabled');
     }
   }
@@ -109,7 +109,7 @@ const SplitViewSash: React.FC<SplitViewSashProps> = ({
 
   const onMouseDownCallback = useCallback(
     (e: React.MouseEvent) => {
-      if (sashState != SplitViewSashState.Disabled) {
+      if (sashState !== SplitViewSashState.Disabled) {
         mousePositionRef.current =
           layout === 'horizontal' ? e.screenX : e.screenY;
         mouseDownRef.current = true;
@@ -120,7 +120,7 @@ const SplitViewSash: React.FC<SplitViewSashProps> = ({
   );
 
   const onMouseEnter = useCallback(() => {
-    if (!mouseDownRef.current && sashState != SplitViewSashState.Disabled) {
+    if (!mouseDownRef.current && sashState !== SplitViewSashState.Disabled) {
       setState((pre) => ({ ...pre, mouseEnter: true }));
     }
   }, [sashState]);
