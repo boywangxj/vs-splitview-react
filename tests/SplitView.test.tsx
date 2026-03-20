@@ -13,7 +13,6 @@ import {
   user,
 } from './testUtils';
 import { DEFAULT_HOVER_DELAY } from '../lib/SplitView';
-console.log('start');
 it.each<
   [string, Layout, SplitViewPaneInfo[], { width: number; height: number }[]]
 >([
