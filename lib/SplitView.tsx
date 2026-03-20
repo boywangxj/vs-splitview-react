@@ -46,7 +46,7 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
 
     if (index === paneData.length - 1) {
       // 最后一条
-      if (allHaveMaxSizePanes == paneData.length) {
+      if (allHaveMaxSizePanes === paneData.length) {
         maxSize = Number.POSITIVE_INFINITY;
       }
     }
@@ -56,7 +56,7 @@ const relayout = (containerSize: number, paneData: SplitViewPaneInfo[]) => {
     if (pane.snapable && pane.snapped === true) {
       size = pane.snappedSize!;
     } else {
-      size = pane.minSize;
+      size = size !== undefined ? size : pane.minSize;
     }
 
     pane.minSize = minSize;
@@ -160,7 +160,7 @@ const resize = (
     const paneAdjustableSize =
       direction > 0
         ? pane.maxSize! - pane.size!
-        : pane.snapable && pane.size == pane.minSize && commiting
+        : pane.snapable && pane.size === pane.minSize && commiting
         ? pane.minSize
         : pane.size! - pane.minSize;
     if (paneAdjustableSize >= adjustSizeTotal) {
@@ -176,7 +176,7 @@ const resize = (
       }
       adjustableSize += paneAdjustableSize;
     }
-    if (commiting && pane.snapped && pane.size! != pane.snappedSize) {
+    if (commiting && pane.snapped && pane.size! !== pane.snappedSize) {
       pane.snapped = false;
     }
   }
@@ -202,15 +202,12 @@ const SplitView: React.FC<SplitViewProps> = ({
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   containerSizeRef.current = containerSize;
-  console.log('containerSize', containerSize);
   useEffect(() => {
     if (containerSize > 0) {
       initedRef.current = true;
-      console.log('ppppp', containerSize);
       setPaneDataState((prevPaneData) => {
         const data = prevPaneData.map((t) => ({ ...t }));
         relayout(containerSize, data);
-        console.log('sosososo', data);
         return data;
       });
     }
@@ -219,17 +216,7 @@ const SplitView: React.FC<SplitViewProps> = ({
   const updatePaneData = useCallback(() => {
     // 仅当paneInfo属性变化时
     setPaneDataState((prevPaneData) => {
-      console.log('ooo0000o2342342342', containerSizeRef.current);
-      if (
-        containerSizeRef.current > 0
-        //  &&
-        // (prevPaneData.length != paneData.length ||
-        //   paneData.some((pane1, index) => {
-        //     const pane2 = prevPaneData[index];
-        //     return pane2 && pane1 && !isPaneEquals(pane1, pane2);
-        //   }))
-      ) {
-        console.log('ooo0000o');
+      if (containerSizeRef.current > 0) {
         const paneDataCloned = paneData.map((t) => ({ ...t }));
         relayout(containerSizeRef.current, paneDataCloned);
         return [...paneDataCloned];
@@ -240,7 +227,6 @@ const SplitView: React.FC<SplitViewProps> = ({
 
   useEffect(() => {
     if (!updatedRef.current && containerSize > 0) {
-      console.log('updated');
       updatedRef.current = true;
       updatePaneData();
     }
@@ -251,7 +237,6 @@ const SplitView: React.FC<SplitViewProps> = ({
       actionRef.current = { updatePaneData };
     }
   }, [actionRef, updatePaneData]);
-  // useEffect(() => {}, [paneData]);
 
   const sumRef = useRef(0);
   const onSashDragStopedCallback = useCallback(() => {
@@ -271,10 +256,10 @@ const SplitView: React.FC<SplitViewProps> = ({
         let increasableSize = resize(increasingPanes, adjustSize, 1, false);
         let decreasableSize = resize(decreasingPanes, adjustSize, -1, false);
         if (
-          increasableSize == 0 &&
+          increasableSize === 0 &&
           increasingPanes[0].snapable &&
           increasingPanes[0].snapped &&
-          increasingPanes[0].minSize != increasingPanes[0].maxSize
+          increasingPanes[0].minSize !== increasingPanes[0].maxSize
         ) {
           const fixedPaneCount = increasingPanes.reduce((total, pane) => {
             if (pane.minSize === pane.maxSize) {
@@ -300,11 +285,11 @@ const SplitView: React.FC<SplitViewProps> = ({
         }
 
         if (
-          decreasableSize == 0 &&
+          decreasableSize === 0 &&
           decreasingPanes.length > 0 &&
           decreasingPanes[0].snapable &&
           !decreasingPanes[0].snapped &&
-          decreasingPanes[0].minSize != decreasingPanes[0].maxSize //非固定固定
+          decreasingPanes[0].minSize !== decreasingPanes[0].maxSize //非固定固定
         ) {
           const fixedPaneCount = decreasingPanes.reduce((total, pane) => {
             if (pane.minSize === pane.maxSize) {
@@ -366,13 +351,13 @@ const SplitView: React.FC<SplitViewProps> = ({
         const behandPaneData = paneDataState[i];
         let state = SplitViewSashState.Enabled;
         if (
-          frontPaneData.minSize == frontPaneData.maxSize ||
-          behandPaneData.minSize == behandPaneData.maxSize
+          frontPaneData.minSize === frontPaneData.maxSize ||
+          behandPaneData.minSize === behandPaneData.maxSize
         ) {
           state = SplitViewSashState.Disabled;
-        } else if (frontPaneData.minSize == frontPaneData.size) {
+        } else if (frontPaneData.minSize === frontPaneData.size) {
           state = SplitViewSashState.Minimum;
-        } else if (frontPaneData.maxSize == frontPaneData.size) {
+        } else if (frontPaneData.maxSize === frontPaneData.size) {
           state = SplitViewSashState.Maximum;
         }
         // index从1开始
@@ -418,26 +403,24 @@ const SplitView: React.FC<SplitViewProps> = ({
 
   useEffect(() => {
     if (
-      paneDataState.length != paneData.length ||
+      paneDataState.length !== paneData.length ||
       paneData.some((pane1, index) => {
         const pane2 = paneDataState[index];
         return pane2 && pane1 && !isPaneEquals(pane1, pane2);
       })
     ) {
-      console.log('o');
       onChangeRef.current?.(paneDataState);
     }
   }, [paneDataState, paneData]);
 
   // 测试需要
   const testId =
-    viewName && process && process.env && process.env.NODE_ENV == 'test'
+    viewName && process && process.env && process.env.NODE_ENV === 'test'
       ? `splitview_${viewName}`
       : undefined;
   const sashContainerTestId = testId ? `${testId}_sash_container` : undefined;
   const paneContainerTestId = testId ? `${testId}_pane_container` : undefined;
 
-  console.log('render', paneAndSash);
   return (
     <Context.Provider value={{ layout, paneMap: paneAndSash.paneMap, testId }}>
       <ResizeObserver
